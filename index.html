@@ -1,8 +1,6 @@
 <!DOCTYPE html>
 <html lang="en" class="dark">
 <head>
-    <script src="spc_data.js"></script>
-<script src="nws_data.js"></script>
     <script src="weather_data.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -943,7 +941,6 @@
         }
 
         renderEncyclopedia();
-    </script>
     function loadSpcTab(tab) {
     const container = document.getElementById('spcContentWindow');
     if(tab === 'spc') {
@@ -1025,5 +1022,6 @@ function toggleAppTheme() {
     let isLight = document.body.classList.contains('bg-slate-100');
     // You can dynamically flip text elements if needed, keeping your core dark layout standard.
 }
+></script>
 </body>
 </html>

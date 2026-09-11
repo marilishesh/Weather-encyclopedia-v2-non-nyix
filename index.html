@@ -2,6 +2,7 @@
 <html lang="en" class="dark">
 <head>
     <script src="spc_data.js"></script>
+<script src="nws_data.js"></script>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Aetheris // Comprehensive Scientific Meteorology Encyclopedia & Calculus Engine</title>
@@ -942,5 +943,17 @@
 
         renderEncyclopedia();
     </script>
+    function loadSpcTab(tab) {
+    const container = document.getElementById('spcContentWindow');
+    if(tab === 'spc') {
+        container.innerHTML = typeof SPC_OUTLOOK_CONTENT !== 'undefined' 
+            ? SPC_OUTLOOK_CONTENT 
+            : "<p class='text-red-400'>Error: spc_data.js not loaded.</p>";
+    } else {
+        container.innerHTML = typeof NWS_FORECAST_CONTENT !== 'undefined' 
+            ? NWS_FORECAST_CONTENT 
+            : "<p class='text-red-400'>Error: nws_data.js not loaded.</p>";
+    }
+}
 </body>
 </html>

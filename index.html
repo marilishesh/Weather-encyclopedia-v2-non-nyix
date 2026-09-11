@@ -1,0 +1,945 @@
+<!DOCTYPE html>
+<html lang="en" class="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Aetheris // Comprehensive Scientific Meteorology Encyclopedia & Calculus Engine</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            darkMode: 'class',
+            theme: {
+                extend: {
+                    colors: {
+                        forge: {
+                            50: '#fdf8f6',
+                            100: '#f2e8e5',
+                            500: '#f97316',
+                            600: '#ea580c',
+                            900: '#7c2d12',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-slate-950 text-slate-100 font-sans antialiased min-h-screen flex flex-col">
+
+    <!-- Top Navigation & Search Bar Header -->
+    <header class="sticky top-0 z-50 bg-slate-900/90 backdrop-blur-md border-b border-slate-800 px-4 py-3">
+        <div class="max-w-7xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4">
+            <div class="flex items-center space-x-3">
+                <div class="w-10 h-10 rounded-lg bg-gradient-to-br from-orange-500 to-amber-600 flex items-center justify-center shadow-lg shadow-orange-500/20">
+                    <i class="fa-solid fa-atom text-white text-lg"></i>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg tracking-wide text-white">AETHERIS // MASTER SCIENTIFIC EDITION</h1>
+                    <p class="text-xs text-slate-400">Exhaustive Atmospheric Encyclopedia & Meteorological Calculus Engine</p>
+                </div>
+            </div>
+
+            <!-- Search Bar -->
+            <div class="w-full md:w-80 relative">
+                <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-slate-400">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </span>
+                <input type="text" id="searchInput" placeholder="Search 60+ scientific topics, equations..." 
+                    class="w-full pl-10 pr-4 py-2 bg-slate-950 border border-slate-700 rounded-lg text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-orange-500 focus:ring-1 focus:ring-orange-500 transition-all">
+            </div>
+
+            <!-- Controls / AI & Math Modals -->
+            <div class="flex items-center space-x-3">
+                <button onclick="toggleMathModal()" class="bg-amber-600 hover:bg-amber-500 text-white px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2 shadow-lg shadow-amber-600/20">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span>Weather Calculus & Math</span>
+                </button>
+                <button onclick="toggleAIPanel()" class="bg-orange-600 hover:bg-orange-500 text-white px-3.5 py-2 rounded-lg text-sm font-medium transition-colors flex items-center space-x-2 shadow-lg shadow-orange-600/20">
+                    <i class="fa-solid fa-brain"></i>
+                    <span>Diagnostic AI</span>
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Main Workspace -->
+    <main class="max-w-7xl mx-auto px-4 py-6 flex-1 w-full grid grid-cols-1 lg:grid-cols-4 gap-6">
+        
+        <!-- Category Sidebar Filter -->
+        <aside class="lg:col-span-1 space-y-4">
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4">
+                <h2 class="text-xs font-semibold uppercase tracking-wider text-slate-400 mb-3">Scientific Domains</h2>
+                <div id="categoryList" class="space-y-1">
+                    <button onclick="filterCategory('all')" class="category-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium bg-orange-600 text-white transition-colors">All Domains (60)</button>
+                    <button onclick="filterCategory('Atmospheric Thermodynamics')" class="category-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors">Atmospheric Thermodynamics</button>
+                    <button onclick="filterCategory('Dynamic Meteorology & Forces')" class="category-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors">Dynamic Meteorology & Forces</button>
+                    <button onclick="filterCategory('Severe Convective Dynamics')" class="category-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors">Severe Convective Dynamics</button>
+                    <button onclick="filterCategory('Cloud Microphysics & Precipitation')" class="category-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors">Cloud Microphysics & Precipitation</button>
+                    <button onclick="filterCategory('Synoptic & Mesoscale Systems')" class="category-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors">Synoptic & Mesoscale Systems</button>
+                    <button onclick="filterCategory('Radar Meteorology & Instrumentation')" class="category-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors">Radar Meteorology & Instrumentation</button>
+                </div>
+            </div>
+            
+            <div class="bg-slate-900 border border-slate-800 rounded-xl p-4 text-xs text-slate-400 space-y-2">
+                <p class="font-semibold text-slate-300"><i class="fa-solid fa-flask text-orange-500 mr-1"></i> Research Note</p>
+                <p>Over 60 exhaustive scientific entries mapped with interconnections. Open the Weather Calculus menu above for step-by-step math guides from basic rules to college-level differential equations.</p>
+            </div>
+        </aside>
+
+        <!-- Encyclopedia Content Grid -->
+        <section class="lg:col-span-3 space-y-6">
+            <div class="flex items-center justify-between">
+                <h2 id="sectionTitle" class="text-xl font-bold text-white tracking-tight">Master Knowledge Base</h2>
+                <span id="resultCount" class="text-xs text-slate-400">Showing all entries</span>
+            </div>
+
+            <div id="encyclopediaGrid" class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <!-- Injected via JavaScript -->
+            </div>
+        </section>
+
+    </main>
+
+    <!-- Weather Calculus & Math Engine Modal -->
+    <div id="mathModal" class="fixed inset-0 z-50 bg-black/80 backdrop-blur-md hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-5xl flex flex-col h-[85vh] shadow-2xl overflow-hidden">
+            <!-- Modal Header -->
+            <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/70">
+                <div class="flex items-center space-x-3">
+                    <div class="w-9 h-9 rounded-lg bg-amber-600/20 border border-amber-500/40 flex items-center justify-center text-amber-500">
+                        <i class="fa-solid fa-calculator"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-white">Meteorological Calculus & Mathematics Masterclass</h3>
+                        <p class="text-xs text-slate-400">From everyday weather approximations to college-level differential equations</p>
+                    </div>
+                </div>
+                <button onclick="toggleMathModal()" class="text-slate-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Math Level Navigation Tabs -->
+            <div class="px-6 py-3 bg-slate-950/40 border-b border-slate-800 flex flex-wrap gap-2 text-xs">
+                <button onclick="switchMathLevel('level1')" id="btn-level1" class="math-tab-btn px-4 py-2 rounded-lg bg-amber-600 text-white font-medium transition-colors">Level 1: Everyday Weather Math</button>
+                <button onclick="switchMathLevel('level2')" id="btn-level2" class="math-tab-btn px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors">Level 2: Intermediate Thermodynamics</button>
+                <button onclick="switchMathLevel('level3')" id="btn-level3" class="math-tab-btn px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors">Level 3: College Dynamics & Balances</button>
+                <button onclick="switchMathLevel('level4')" id="btn-level4" class="math-tab-btn px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-800 transition-colors">Level 4: Advanced Calculus & CAPE Integrals</button>
+            </div>
+
+            <!-- Math Content Window -->
+            <div id="mathContentWindow" class="flex-1 p-6 overflow-y-auto space-y-6 text-sm">
+                <!-- Dynamically loaded via JS -->
+            </div>
+        </div>
+    </div>
+
+    <!-- AI Assistant Modal / Drawer -->
+    <div id="aiModal" class="fixed inset-0 z-50 bg-black/70 backdrop-blur-sm hidden flex items-center justify-center p-4">
+        <div class="bg-slate-900 border border-slate-800 rounded-2xl w-full max-w-3xl flex flex-col h-[80vh] shadow-2xl overflow-hidden">
+            <!-- Modal Header -->
+            <div class="p-4 border-b border-slate-800 flex items-center justify-between bg-slate-950/50">
+                <div class="flex items-center space-x-3">
+                    <div class="w-8 h-8 rounded-lg bg-orange-600/20 border border-orange-500/40 flex items-center justify-center text-orange-500">
+                        <i class="fa-solid fa-microchip"></i>
+                    </div>
+                    <div>
+                        <h3 class="font-bold text-sm text-white">Aetheris Atmospheric Diagnostic Engine</h3>
+                        <p class="text-xs text-slate-400">Advanced AI with source citation & depth controls</p>
+                    </div>
+                </div>
+                <button onclick="toggleAIPanel()" class="text-slate-400 hover:text-white transition-colors">
+                    <i class="fa-solid fa-xmark text-lg"></i>
+                </button>
+            </div>
+
+            <!-- Response Length Controls -->
+            <div class="px-4 py-2 bg-slate-950/30 border-b border-slate-800/60 flex items-center justify-between text-xs">
+                <span class="text-slate-400 font-medium">Analysis Depth:</span>
+                <div class="flex space-x-2">
+                    <button onclick="setResponseLength('short')" id="len-short" class="length-btn px-3 py-1 rounded bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors">Concise</button>
+                    <button onclick="setResponseLength('medium')" id="len-medium" class="length-btn px-3 py-1 rounded bg-orange-600 text-white font-medium transition-colors">Detailed</button>
+                    <button onclick="setResponseLength('deep')" id="len-deep" class="length-btn px-3 py-1 rounded bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors">Rigorous / Doctoral</button>
+                </div>
+            </div>
+
+            <!-- Chat Window -->
+            <div id="aiChatWindow" class="flex-1 p-4 overflow-y-auto space-y-4 text-sm">
+                <div class="flex items-start space-x-3">
+                    <div class="w-8 h-8 rounded-full bg-orange-600 flex-shrink-0 flex items-center justify-center text-white text-xs font-bold">AI</div>
+                    <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-3 text-slate-200 max-w-xl">
+                        At your service, Nono. Ask me to parse any of the 60+ meteorological phenomena, cross-examine thermodynamic equations, or evaluate mesoscale soundings.
+                    </div>
+                </div>
+            </div>
+
+            <!-- Input Bar -->
+            <div class="p-4 border-t border-slate-800 bg-slate-950/50">
+                <form id="aiForm" onsubmit="handleAIQuery(event)" class="flex gap-2">
+                    <input type="text" id="aiInput" placeholder="Query any of the 60+ topics, equations, or soundings..." 
+                        class="flex-1 px-4 py-2 bg-slate-900 border border-slate-700 rounded-xl text-sm text-slate-200 placeholder-slate-500 focus:outline-none focus:border-orange-500">
+                    <button type="submit" class="bg-orange-600 hover:bg-orange-500 text-white px-5 py-2 rounded-xl text-sm font-medium transition-colors flex items-center justify-center">
+                        <i class="fa-solid fa-paper-plane"></i>
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="border-t border-slate-800/80 py-4 text-center text-xs text-slate-500">
+        Aetheris Master Scientific Meteorological Database // Built for Nono
+    </footer>
+
+    <!-- JavaScript Data and Core Logic -->
+    <script>
+        const encyclopediaData = [
+            // --- ATMOSPHERIC THERMODYNAMICS (10 topics) ---
+            {
+                id: 1,
+                title: "Convective Available Potential Energy (CAPE)",
+                category: "Atmospheric Thermodynamics",
+                description: "CAPE represents the vertically integrated positive buoyancy of an air parcel lifted adiabatically from the level of free convection (LFC) to its equilibrium level (EL). Mathematically: CAPE = g ∫ (T_parcel - T_environment) / T_environment dz. It defines maximum kinetic energy acquired from thermal instability.",
+                connection: "Fuels Severe Convective Dynamics by providing energy converted into vertical updraft velocity."
+            },
+            {
+                id: 2,
+                title: "Potential Temperature (θ)",
+                category: "Atmospheric Thermodynamics",
+                description: "The temperature an unsaturated air parcel would attain if brought adiabatically to a standard reference pressure (1000 hPa). Conserved during dry adiabatic displacements, serving as a primary tracer for air mass analysis.",
+                connection: "Vital for identifying frontal boundaries and analyzing stability profiles on skew-T diagrams."
+            },
+            {
+                id: 3,
+                title: "Equivalent Potential Temperature (θe)",
+                category: "Atmospheric Thermodynamics",
+                description: "The temperature an air parcel would reach if all its moisture were condensed out via pseudoadiabatic ascent, releasing latent heat, and the dry parcel brought adiabatically to 1000 hPa. Conserved during both dry and moist adiabatic processes.",
+                connection: "Tracers of moist conveyor belts in Synoptic & Mesoscale Systems and squall line outflow boundaries."
+            },
+            {
+                id: 4,
+                title: "Mixing Ratio and Specific Humidity",
+                category: "Atmospheric Thermodynamics",
+                description: "Mixing ratio is the mass of water vapor relative to dry air mass (r = m_v / m_d). Specific humidity uses total moist air mass. Both quantify absolute atmospheric moisture content without volume dependence.",
+                connection: "Determines dew point depressions and latent heat energy available for parcel buoyancy."
+            },
+            {
+                id: 5,
+                title: "Lifted Condensation Level (LCL)",
+                category: "Atmospheric Thermodynamics",
+                description: "The height at which an air parcel lifted dry-adiabatically becomes saturated relative to liquid water. Determined by surface temperature and dew point spread.",
+                connection: "Marks cloud base height in convective towers and dictates boundary layer base cloud structures."
+            },
+            {
+                id: 6,
+                title: "Level of Free Convection (LFC)",
+                category: "Atmospheric Thermodynamics",
+                description: "The altitude in the atmosphere where a lifted parcel becomes warmer than its surrounding environment, rendering it positively buoyant and allowing self-sustaining ascent.",
+                connection: "The precise triggering threshold separating suppressed boundary layers from explosive thunderstorm updrafts."
+            },
+            {
+                id: 7,
+                title: "Equilibrium Level (EL)",
+                category: "Atmospheric Thermodynamics",
+                description: "The height in the upper troposphere where a rising parcel's temperature matches the environment again, losing positive buoyancy. Forms the base of the anvil cloud.",
+                connection: "Caps maximum updraft vertical extent, governing anvil spread and overshooting top dynamics."
+            },
+            {
+                id: 8,
+                title: "Convective Inhibition (CIN)",
+                category: "Atmospheric Thermodynamics",
+                description: "The amount of energy required to overcome negative buoyancy in a stable layer (cap) near the surface, preventing parcels from reaching their LFC.",
+                connection: "Regulates storm initiation timing; excessive CIN suppresses storms, while moderate CIN allows energy buildup."
+            },
+            {
+                id: 9,
+                title: "Atmospheric Radiative Forcing & Greenhouse Spectra",
+                category: "Atmospheric Thermodynamics",
+                description: "Net change in tropopause radiation balance due to greenhouse gas absorption bands (e.g., CO2 15μm, water vapor rotational bands) trapping longwave terrestrial radiation.",
+                connection: "Governs background tropospheric temperature profiles and macro-scale climate baselines."
+            },
+            {
+                id: 10,
+                title: "Wet-Bulb Zero Height",
+                category: "Atmospheric Thermodynamics",
+                description: "The altitude where the wet-bulb temperature reaches 0°C. Critical parameter for calculating melting layers and differentiating hail melting potential.",
+                connection: "Links thermodynamics directly to Cloud Microphysics and severe hail forecasting."
+            },
+
+            // --- DYNAMIC METEOROLOGY & FORCES (10 topics) ---
+            {
+                id: 11,
+                title: "Geostrophic and Gradient Wind Balance",
+                category: "Dynamic Meteorology & Forces",
+                description: "Geostrophic balance balances horizontal Pressure Gradient Force (PGF) against the Coriolis force, creating flow parallel to straight isobars. Gradient wind adds centrifugal force for curved trajectories.",
+                connection: "Forms the bedrock foundation for Synoptic & Mesoscale Systems and jet stream flow."
+            },
+            {
+                id: 12,
+                title: "Atmospheric Boundary Layer & Ekman Spiral",
+                category: "Dynamic Meteorology & Forces",
+                description: "Lowest tropospheric layer dominated by surface friction. Frictional deceleration reduces Coriolis force, turning winds across isobars toward low pressure with height.",
+                connection: "Directly drives surface convergence lines that initiate daytime convective thermals."
+            },
+            {
+                id: 13,
+                title: "Coriolis Parameter & Inertial Oscillations",
+                category: "Dynamic Meteorology & Forces",
+                description: "Apparent deflection force due to Earth's rotation (f = 2Ω sin φ). Proportional to angular velocity and latitude, zero at the equator.",
+                connection: "Dictates large-scale cyclonic and anticyclonic vortex rotation directions in both hemispheres."
+            },
+            {
+                id: 14,
+                title: "Thermal Wind Equation",
+                category: "Dynamic Meteorology & Forces",
+                description: "The vector difference in geostrophic wind with height, proportional to horizontal temperature gradients (thermal wind is perpendicular to isotherms).",
+                connection: "Explains jet stream intensification in regions of strong horizontal baroclinicity and frontal zones."
+            },
+            {
+                id: 15,
+                title: "Vorticity and Potential Vorticity Conservation",
+                category: "Dynamic Meteorology & Forces",
+                description: "Relative vorticity measures local spin of air parcels. Potential vorticity is conserved in adiabatic, frictionless flow, forcing columns to stretch or compress as they cross topography.",
+                connection: "Triggers lee cyclogenesis and guides upper-level shortwave trough propagation."
+            },
+            {
+                id: 16,
+                title: "Ageostrophic Wind Components",
+                category: "Dynamic Meteorology & Forces",
+                description: "The vector remainder when geostrophic wind is subtracted from total wind (V_ag = V - V_g). Driven by accelerations near jet streaks and frontal boundaries.",
+                connection: "Creates vertical circulation cells (e.g., entrance/exit region jet streaks) that trigger heavy precipitation."
+            },
+            {
+                id: 17,
+                title: "Hydrostatic Balance",
+                category: "Dynamic Meteorology & Forces",
+                description: "Vertical equilibrium where upward PGF exactly balances downward gravitational force (dp/dz = -ρg).",
+                connection: "Underpins pressure-height calculations and numerical weather prediction models globally."
+            },
+            {
+                id: 18,
+                title: "Cyclostrophic Balance",
+                category: "Dynamic Meteorology & Forces",
+                description: "Balance between inward PGF and outward centrifugal force, occurring on small scales (tornadoes, waterspouts) where Coriolis force is negligible.",
+                connection: "Explains the extreme wind velocities swirling inside intense tornado cores."
+            },
+            {
+                id: 19,
+                title: "Inertial Instability",
+                category: "Dynamic Meteorology & Forces",
+                description: "Occurs when absolute vorticity has the opposite sign of the Coriolis parameter in regions of extreme horizontal shear, leading to rapid cross-equatorial or jet-core air exchange.",
+                connection: "Destabilizes upper-level outflow channels in intense tropical cyclones."
+            },
+            {
+                id: 20,
+                title: "Ekman Pumping & Boundary Layer Convergence",
+                category: "Dynamic Meteorology & Forces",
+                description: "Frictional turning in the boundary layer induces net vertical mass flux out of (or into) the boundary layer, linking surface friction to free-tropospheric vertical motion.",
+                connection: "Enhances vertical lift along surface trough axes and low-pressure centers."
+            },
+
+            // --- SEVERE CONVECTIVE DYNAMICS (10 topics) ---
+            {
+                id: 21,
+                title: "0-6km Bulk Wind Shear & Hodograph Geometry",
+                category: "Severe Convective Dynamics",
+                description: "Vector difference between surface winds and 6km tropospheric flow. Hodographs map wind vectors with height in 2D space. Curvature determines storm-relative inflow and rotation.",
+                connection: "Couples with CAPE to dictate storm typology, enabling persistent supercell mesocyclones."
+            },
+            {
+                id: 22,
+                title: "Mesocyclones & Tornadogenesis Mechanisms",
+                category: "Severe Convective Dynamics",
+                description: "Persistent rotating updrafts within supercells. Tornadogenesis involves tilting horizontal vorticity into vertical rotation via updraft stretching, amplified by rear-flank downdrafts (RFD).",
+                connection: "Relies on low-level shear, storm-relative helicity, and boundary layer thermodynamics."
+            },
+            {
+                id: 23,
+                title: "Microbursts & Downburst Dynamics",
+                category: "Severe Convective Dynamics",
+                description: "Localized violent downdrafts producing damaging straight-line winds. Driven by precipitation drag and intense evaporative cooling making parcels negatively buoyant.",
+                connection: "Provides downdraft momentum that shapes squall line bow echoes and gust fronts."
+            },
+            {
+                id: 24,
+                title: "Supercell Thunderstorm Morphology",
+                category: "Severe Convective Dynamics",
+                description: "Storms featuring a rotating updraft (mesocyclone). Subdivided into classic, HP (high-precipitation), and LP (low-precipitation) variants based on rainfall distribution.",
+                connection: "Represent the peak expression of severe convective interaction between wind shear and thermal buoyancy."
+            },
+            {
+                id: 25,
+                title: "Squall Lines & Mesoscale Convective Systems (MCS)",
+                category: "Severe Convective Dynamics",
+                description: "Linear bands of thunderstorms accompanied by leading convective lines and trailing stratiform precipitation regions, sustained by cold pools and inflow gust fronts.",
+                connection: "Dominant producers of widespread damaging straight-line winds (derechos) across continents."
+            },
+            {
+                id: 26,
+                title: "Storm-Relative Helicity (SRH)",
+                category: "Severe Convective Dynamics",
+                description: "Quantifies the amount of streamwise vorticity available to a moving thunderstorm in the lowest 1km or 3km layer (units of m²/s²).",
+                connection: "Directly correlates with tornadic potential and mesocyclone rotation strength."
+            },
+            {
+                id: 27,
+                title: "Drylines and Convective Initiation Boundaries",
+                category: "Severe Convective Dynamics",
+                description: "Narrow boundary layer convergence zones separating moist maritime air from dry continental air masses, creating steep moisture gradients.",
+                connection: "Acts as the primary ignition trigger for severe supercells across the US Great Plains."
+            },
+            {
+                id: 28,
+                title: "Rear-Flank Downdraft (RFD) Dynamics",
+                category: "Severe Convective Dynamics",
+                description: "A localized downdraft wrapping around the back of a supercell's mesocyclone, driven by mid-level momentum transport and evaporative cooling.",
+                connection: "Crucial element in funneling rotation down to the surface during tornadogenesis."
+            },
+            {
+                id: 29,
+                title: "BWD (Bulk Wind Difference) and Effective Shear",
+                category: "Severe Convective Dynamics",
+                description: "Calculates wind shear specifically within the depth of the storm (from surface to the equilibrium level or optimal inflow height).",
+                connection: "Refines forecasting accuracy for supercell longevity compared to fixed-layer shear."
+            },
+            {
+                id: 30,
+                title: "Derechos & Mesoscale Convective Complexes (MCC)",
+                category: "Severe Convective Dynamics",
+                description: "Widespread, long-lived convective windstorms associated with bands of fast-moving thunderstorms (bow echoes) traveling hundreds of kilometers.",
+                connection: "Represents the ultimate upscale growth of severe convective squall systems."
+            },
+
+            // --- CLOUD MICROPHYSICS & PRECIPITATION (10 topics) ---
+            {
+                id: 31,
+                title: "Wegener-Bergeron-Findeisen Ice Process",
+                category: "Cloud Microphysics & Precipitation",
+                description: "Thermodynamic disequilibrium where ice crystals grow rapidly at the expense of supercooled droplets in mixed-phase clouds due to vapor pressure differentials.",
+                connection: "Essential for Hail Formation and efficient cold-cloud precipitation mechanisms."
+            },
+            {
+                id: 32,
+                title: "Collision-Coalescence Warm Rain Process",
+                category: "Cloud Microphysics & Precipitation",
+                description: "Cloud droplets of varying sizes fall at different terminal velocities due to drag, colliding and coalescing into larger raindrops without ice phase involvement.",
+                connection: "Dominant precipitation mechanism in warm tropical maritime cumulus clouds."
+            },
+            {
+                id: 33,
+                title: "Hail Growth Trajectories & Accumulation",
+                category: "Cloud Microphysics & Precipitation",
+                description: "Hailstones grow by collecting supercooled water droplets within intense convective updrafts, cycling through wet and dry growth regimes before gravity overcomes buoyancy.",
+                connection: "Directly linked to updraft strength (CAPE) and supercooled liquid water content."
+            },
+            {
+                id: 34,
+                title: "Cloud Condensation Nuclei (CCN) & Ice Nuclei (IN)",
+                category: "Cloud Microphysics & Precipitation",
+                description: "Aerosol particles (dust, sea salt, soot) upon which water vapor condenses or ice nucleates. Dictates droplet size distribution and cloud albedo.",
+                connection: "Alters precipitation efficiency and microphysical evolution within convective updrafts."
+            },
+            {
+                id: 35,
+                title: "Supercooled Liquid Water & Rime Accretion",
+                category: "Cloud Microphysics & Precipitation",
+                description: "Water droplets remaining liquid below 0°C. Upon colliding with ice crystals, they freeze instantly, forming rime ice and graupel pellets.",
+                connection: "The primary building block for thunderstorm electrification and charge separation."
+            },
+            {
+                id: 36,
+                title: "Cloud Electrification & Lightning Mechanics",
+                category: "Cloud Microphysics & Precipitation",
+                description: "Non-inductive charging occurs during collisions between graupel pellets and ice crystals in the presence of supercooled water, separating positive and negative ions.",
+                connection: "Results in intra-cloud and cloud-to-ground lightning flashes accompanying severe storms."
+            },
+            {
+                id: 37,
+                title: "Terminal Fall Velocity & Stokes' Law",
+                category: "Cloud Microphysics & Precipitation",
+                description: "The equilibrium velocity attained by a falling droplet when gravitational force equals aerodynamic drag. Governed by particle size and shape.",
+                connection: "Determines precipitation arrival times and radar reflectivity calibration factors."
+            },
+            {
+                id: 38,
+                title: "Riming and Graupel Formation",
+                category: "Cloud Microphysics & Precipitation",
+                description: "The process where falling ice crystals collect supercooled droplets that freeze on contact, creating opaque snow pellets (graupel).",
+                connection: "Serves as the embryo core for large hailstone development in strong updrafts."
+            },
+            {
+                id: 39,
+                title: "Homogeneous vs. Heterogeneous Ice Nucleation",
+                category: "Cloud Microphysics & Precipitation",
+                description: "Homogeneous freezing occurs spontaneously in pure water droplets below -38°C. Heterogeneous nucleation occurs at warmer temperatures (-5°C to -20°C) using foreign ice nuclei.",
+                connection: "Governs the phase state transition threshold in towering convective clouds."
+            },
+            {
+                id: 40,
+                title: "Warm Fog and Radiation Fog Microphysics",
+                category: "Cloud Microphysics & Precipitation",
+                description: "Ground-level cloud formation driven by radiative surface cooling or advection of warm air over cold surfaces, saturating boundary layer air.",
+                connection: "Influences low-level visibility, aviation routing, and regional boundary layer stability."
+            },
+
+            // --- SYNOPTIC & MESOSCALE SYSTEMS (10 topics) ---
+            {
+                id: 41,
+                title: "Rossby Waves & Planetary-Scale Wave Dynamics",
+                category: "Synoptic & Mesoscale Systems",
+                description: "Large-scale meanders in planetary westerlies driven by conservation of potential vorticity across latitudinal gradients of the Coriolis parameter.",
+                connection: "Drives upper-level trough/ridge propagation and dictates surface cyclone development."
+            },
+            {
+                id: 42,
+                title: "El Niño-Southern Oscillation (ENSO) Teleconnections",
+                category: "Synoptic & Mesoscale Systems",
+                description: "Fluctuations in tropical Pacific sea surface temperatures and atmospheric pressure (Southern Oscillation) altering global Walker circulation cells.",
+                connection: "Modulates interannual severe weather frequencies and global jet stream tracks."
+            },
+            {
+                id: 43,
+                title: "Extratropical Cyclones & Baroclinic Instability",
+                category: "Synoptic & Mesoscale Systems",
+                description: "Large-scale low-pressure systems powered by horizontal temperature gradients (baroclinic instability) converting potential energy into kinetic energy.",
+                connection: "Produces vast frontal precipitation shields and drives mid-latitude weather changes."
+            },
+            {
+                id: 44,
+                title: "Tropical Cyclones & Genesis Thermodynamics",
+                category: "Synoptic & Mesoscale Systems",
+                description: "Warm-core rotating synoptic systems fueled by ocean heat fluxes (sea surface temperatures > 26.5°C) and organized convection via WISHE mechanism.",
+                connection: "Brings extreme coastal winds, storm surge, and torrential rainfall."
+            },
+            {
+                id: 45,
+                title: "Jet Streams & Tropopause Folds",
+                category: "Synoptic & Mesoscale Systems",
+                description: "Fast-flowing narrow air currents in upper troposphere (Polar and Subtropical jets) driven by large meridional temperature contrasts.",
+                connection: "Provides upper-level divergence zones that fuel surface cyclone development."
+            },
+            {
+                id: 46,
+                title: "Blocking Highs & Atmospheric Persistence",
+                category: "Synoptic & Mesoscale Systems",
+                description: "Large stationary anticyclones that disrupt normal westerly progression of Rossby waves, locking weather patterns in place for weeks.",
+                connection: "Responsible for prolonged heatwaves, droughts, or persistent cold outbreaks."
+            },
+            {
+                id: 47,
+                title: "Madden-Julian Oscillation (MJO)",
+                category: "Synoptic & Mesoscale Systems",
+                description: "An eastward-moving planetary-scale disturbance of clouds, rainfall, and winds propagating across the tropical oceans over 30 to 60 days.",
+                connection: "Modulates tropical cyclone formation and mid-latitude weather regimes."
+            },
+            {
+                id: 48,
+                title: "Polar Lows & Arctic Mesoscale Cyclones",
+                category: "Synoptic & Mesoscale Systems",
+                description: "Intense, small-scale maritime cyclones forming over high-latitude ice-ocean boundaries driven by intense air-sea temperature differences.",
+                connection: "Delivers severe gale-force winds and heavy snow squalls to polar coastlines."
+            },
+            {
+                id: 49,
+                title: "Monsoon Circulation Dynamics",
+                category: "Synoptic & Mesoscale Systems",
+                description: "Large-scale seasonal wind reversals driven by differential heating between vast continental landmasses and adjacent oceans.",
+                connection: "Drives annual continental rainfall regimes and agricultural water supplies globally."
+            },
+            {
+                id: 50,
+                title: "Convective Conveyor Belts (Warm, Cold, Dry)",
+                category: "Synoptic & Mesoscale Systems",
+                description: "Conceptual model of 3D airflow relative to extratropical cyclones, describing transport of warm moist air northward, cold air sinking behind fronts, and dry stratospheric air descending.",
+                connection: "Explains cloud band positioning and precipitation structures in weather charts."
+            },
+
+            // --- RADAR METEOROLOGY & INSTRUMENTATION (10 topics) ---
+            {
+                id: 51,
+                title: "Dual-Polarization Radar Polarimetric Variables",
+                category: "Radar Meteorology & Instrumentation",
+                description: "Radars transmitting horizontal and vertical pulses measuring Differential Reflectivity (Z_DR), Correlation Coefficient (ρ_hv), and Specific Differential Phase (K_DP).",
+                connection: "Validates Cloud Microphysics by identifying tornado debris signatures and hail cores."
+            },
+            {
+                id: 52,
+                title: "Radar Reflectivity (Z) & Power Equations",
+                category: "Radar Meteorology & Instrumentation",
+                description: "Measures backscattered electromagnetic power proportional to the sixth power of drop diameters (Z = Σ D⁶). Quantifies precipitation intensity.",
+                connection: "Primary tool for tracking storm cells, precipitation cores, and hook echoes."
+            },
+            {
+                id: 53,
+                title: "Doppler Velocity & Radial Wind Measurement",
+                category: "Radar Meteorology & Instrumentation",
+                description: "Detects frequency shifts in returned radar signals caused by targets moving toward or away from the radar antenna (phase shift analysis).",
+                connection: "Essential for identifying mesocyclone rotation, velocity couplets, and shear boundaries."
+            },
+            {
+                id: 54,
+                title: "Radiosonde Soundings & Thermodynamic Profiling",
+                category: "Radar Meteorology & Instrumentation",
+                description: "Balloon-borne instrument packages measuring vertical profiles of pressure, temperature, humidity, and winds up to the stratosphere.",
+                connection: "Provides raw baseline data for calculating CAPE, CIN, and hodograph stability."
+            },
+            {
+                id: 55,
+                title: "Satellite Infrared & Water Vapor Imagery",
+                category: "Radar Meteorology & Instrumentation",
+                description: "Geostationary satellites measuring cloud-top thermal emission (IR) and mid-tropospheric humidity absorption bands (Water Vapor).",
+                connection: "Tracks storm development, cloud-top cooling rates, and dry air intrusion aloft."
+            },
+            {
+                id: 56,
+                title: "Phased Array Radar Technology",
+                category: "Radar Meteorology & Instrumentation",
+                description: "Advanced electronic beam steering radars that scan the atmosphere in milliseconds without mechanical dish rotation.",
+                connection: "Revolutionizes rapid-update scanning of rapidly evolving severe thunderstorms."
+            },
+            {
+                id: 57,
+                title: "Radar Attenuation & Beam Propagation",
+                category: "Radar Meteorology & Instrumentation",
+                description: "Absorption and scattering of radar energy by heavy rain or hail, reducing signal strength over long distances, coupled with atmospheric refraction (super/sub-refraction).",
+                connection: "Aids in correcting precipitation estimates and eliminating anomalous propagation artifacts."
+            },
+            {
+                id: 58,
+                title: "Lightning Mapping Arrays (LMA)",
+                category: "Radar Meteorology & Instrumentation",
+                description: "Ground-based VHF sensor networks that map 3D lightning flash origins and propagation tracks across thunderstorms in real time.",
+                connection: "Correlates lightning jump signatures directly with intensifying severe updrafts."
+            },
+            {
+                id: 59,
+                title: "Wind Profiler Radar Systems",
+                category: "Radar Meteorology & Instrumentation",
+                description: "Vertical-pointing Doppler radars measuring continuous wind profiles through the troposphere using clear-air scattering.",
+                connection: "Monitors low-level jet streams and pre-convective boundary layer wind shifts."
+            },
+            {
+                id: 60,
+                title: "Numerical Weather Prediction (NWP) Assimilation",
+                category: "Radar Meteorology & Instrumentation",
+                description: "Mathematical modeling systems that ingest millions of global observations (satellites, radars, soundings) via data assimilation to initialize atmospheric forecast runs.",
+                connection: "Generates high-resolution ensemble forecasts for severe weather and synoptic outlooks."
+            }
+        ];
+
+        let currentCategory = 'all';
+        let currentResponseLength = 'medium';
+
+        function renderEncyclopedia(filter = 'all', searchQuery = '') {
+            const grid = document.getElementById('encyclopediaGrid');
+            const resultCount = document.getElementById('resultCount');
+            
+            const filtered = encyclopediaData.filter(item => {
+                const matchesCat = filter === 'all' || item.category === filter;
+                const matchesSearch = searchQuery === '' || 
+                    item.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    item.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
+                    item.category.toLowerCase().includes(searchQuery.toLowerCase());
+                return matchesCat && matchesSearch;
+            });
+
+            resultCount.textContent = `Showing ${filtered.length} scientific records`;
+
+            if (filtered.length === 0) {
+                grid.innerHTML = `<div class="col-span-2 py-12 text-center text-slate-500">No scientific records found matching your query.</div>`;
+                return;
+            }
+
+            grid.innerHTML = filtered.map(item => `
+                <div class="bg-slate-900 border border-slate-800 rounded-xl p-5 flex flex-col justify-between hover:border-slate-700 transition-all group">
+                    <div>
+                        <div class="flex items-center justify-between mb-2">
+                            <span class="text-xs font-semibold px-2.5 py-1 rounded-full bg-orange-500/10 text-orange-400 border border-orange-500/20">${item.category}</span>
+                            <button onclick="copyDescription('${item.id}')" class="text-slate-400 hover:text-orange-400 transition-colors text-xs flex items-center space-x-1 bg-slate-950 px-2 py-1 rounded border border-slate-800">
+                                <i class="fa-regular fa-copy"></i>
+                                <span id="copy-text-${item.id}">Copy</span>
+                            </button>
+                        </div>
+                        <h3 class="font-bold text-lg text-white mb-2 group-hover:text-orange-400 transition-colors">${item.title}</h3>
+                        <p id="desc-${item.id}" class="text-sm text-slate-300 leading-relaxed mb-4">${item.description}</p>
+                    </div>
+                    <div class="border-t border-slate-800/80 pt-3 text-xs text-slate-400">
+                        <span class="font-medium text-slate-400"><i class="fa-solid fa-link text-orange-500 mr-1"></i> System Interconnection:</span> ${item.connection}
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function filterCategory(category) {
+            currentCategory = category;
+            document.querySelectorAll('.category-btn').forEach(btn => {
+                if(btn.textContent.trim().startsWith(category) || (category === 'all' && btn.textContent.trim().startsWith('All Domains'))) {
+                    btn.className = "category-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium bg-orange-600 text-white transition-colors";
+                } else {
+                    btn.className = "category-btn w-full text-left px-3 py-2 rounded-lg text-sm font-medium text-slate-300 hover:bg-slate-800 transition-colors";
+                }
+            });
+            document.getElementById('sectionTitle').textContent = category === 'all' ? 'Master Knowledge Base' : category;
+            const searchVal = document.getElementById('searchInput').value;
+            renderEncyclopedia(category, searchVal);
+        }
+
+        document.getElementById('searchInput').addEventListener('input', (e) => {
+            renderEncyclopedia(currentCategory, e.target.value);
+        });
+
+        function copyDescription(id) {
+            const text = document.getElementById(`desc-${id}`).innerText;
+            navigator.clipboard.writeText(text);
+            const btnSpan = document.getElementById(`copy-text-${id}`);
+            btnSpan.textContent = "Copied!";
+            setTimeout(() => { btnSpan.textContent = "Copy"; }, 2000);
+        }
+
+        function toggleAIPanel() {
+            const modal = document.getElementById('aiModal');
+            modal.classList.toggle('hidden');
+        }
+
+        function toggleMathModal() {
+            const modal = document.getElementById('mathModal');
+            modal.classList.toggle('hidden');
+            if(!modal.classList.contains('hidden')) {
+                loadMathLevel('level1');
+            }
+        }
+
+        function switchMathLevel(level) {
+            document.querySelectorAll('.math-tab-btn').forEach(b => {
+                b.className = "math-tab-btn px-4 py-2 rounded-lg bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors";
+            });
+            document.getElementById(`btn-${level}`).className = "math-tab-btn px-4 py-2 rounded-lg bg-amber-600 text-white font-medium transition-colors";
+            loadMathLevel(level);
+        }
+
+        function loadMathLevel(level) {
+            const container = document.getElementById('mathContentWindow');
+            
+            if(level === 'level1') {
+                container.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-3">
+                            <h4 class="text-base font-bold text-amber-400"><i class="fa-solid fa-cloud-sun mr-2"></i> Level 1: Everyday Weather Math & Rules of Thumb</h4>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                Before diving into calculus, meteorologists rely on quick mental math and algebraic approximations to estimate cloud bases, dew point spreads, and stability in the field.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Rule 1 -->
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-3">
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Approximation Rule</span>
+                                <h5 class="font-bold text-white">Convective Cloud Base (LCL) Estimation</h5>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    Want to know how high cumulus cloud bases will form? Subtract the dew point from the temperature and divide by the spread factor.
+                                </p>
+                                <div class="bg-slate-900 p-3 rounded border border-slate-800 font-mono text-xs text-amber-300">
+                                    Base Height (ft) = [ (T - T_d) / 4.4 °F ] × 1000
+                                </div>
+                                <p class="text-xs text-slate-400">
+                                    <em>Conversational Example:</em> If Temp is 85°F and Dew Point is 65°F, spread is 20°F. 20 / 4.4 ≈ 4.54. Multiply by 1,000 to get a cloud base around 4,540 feet AGL!
+                                </p>
+                            </div>
+
+                            <!-- Rule 2 -->
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-3">
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Algebraic Rule</span>
+                                <h5 class="font-bold text-white">Relative Humidity Quick Spread Formula</h5>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    A quick rule of thumb for estimating relative humidity (%) based on temperature and dew point depression when psychrometric tables aren't handy.
+                                </p>
+                                <div class="bg-slate-900 p-3 rounded border border-slate-800 font-mono text-xs text-amber-300">
+                                    RH ≈ 100 - [ 5 × (T - T_d) ]
+                                </div>
+                                <p class="text-xs text-slate-400">
+                                    <em>Conversational Example:</em> Temperature is 80°F, dew point is 70°F (spread = 10°F). RH ≈ 100 - (5 × 10) = 50% humidity.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if(level === 'level2') {
+                container.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-3">
+                            <h4 class="text-base font-bold text-amber-400"><i class="fa-solid fa-temperature-arrow-up mr-2"></i> Level 2: Intermediate Thermodynamics & Poisson's Equation</h4>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                Moving past simple arithmetic, intermediate meteorology introduces dry adiabats, gas laws, and potential temperature conservation using exponential ratios.
+                            </p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- Equation 1 -->
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-3">
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Thermodynamic Law</span>
+                                <h5 class="font-bold text-white">Poisson's Equation for Potential Temperature (θ)</h5>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    Potential temperature is the temperature an air parcel would have if brought adiabatically to 1000 hPa. This equation requires taking temperature to the power of the ratio of specific heats ($R / C_p \approx 0.286$).
+                                </p>
+                                <div class="bg-slate-900 p-3 rounded border border-slate-800 font-mono text-xs text-amber-300 overflow-x-auto">
+                                    θ = T × ( P_0 / P ) ^ ( R_d / C_p )
+                                </div>
+                                <div class="text-xs text-slate-400 space-y-1">
+                                    <p><strong>Where:</strong></p>
+                                    <p>• T = Parcel absolute temperature (Kelvin)</p>
+                                    <p>• P_0 = Standard reference pressure (1000 hPa)</p>
+                                    <p>• P = Current parcel pressure (hPa)</p>
+                                    <p>• R_d / C_p = 287 J/(kg·K) / 1004 J/(kg·K) ≈ 0.286</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if(level === 'level3') {
+                container.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-3">
+                            <h4 class="text-base font-bold text-amber-400"><i class="fa-solid fa-compass mr-2"></i> Level 3: College Dynamics & Balances (Vector & Partial Derivatives)</h4>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                In undergraduate meteorology, forces are evaluated using partial derivatives and vector calculus. Let's look at the Hydrostatic and Geostrophic wind equations.
+                            </p>
+                        </div>
+
+                        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            <!-- Hydrostatic Equation -->
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-3">
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Partial Differential</span>
+                                <h5 class="font-bold text-white">The Hydrostatic Equation</h5>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    States that the vertical pressure gradient force exactly balances downward gravitational acceleration.
+                                </p>
+                                <div class="bg-slate-900 p-3 rounded border border-slate-800 font-mono text-xs text-amber-300">
+                                    ∂p / ∂z = -ρ g
+                                 </div>
+                                <p class="text-xs text-slate-400">
+                                    <em>Explanation:</em> As height (z) increases, pressure (p) decreases proportional to air density ($\rho$) and gravity ($g$).
+                                </p>
+                            </div>
+
+                            <!-- Geostrophic Wind -->
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-3">
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Vector Calculus</span>
+                                <h5 class="font-bold text-white">Geostrophic Wind Vector (V_g)</h5>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    The balance between Coriolis force and horizontal pressure gradient force on a rotating Earth.
+                                </p>
+                                <div class="bg-slate-900 p-3 rounded border border-slate-800 font-mono text-xs text-amber-300">
+                                    V_g = (1 / ρ f) ( k × ∇p )
+                                </div>
+                                <p class="text-xs text-slate-400">
+                                    <em>Explanation:</em> Wind flows parallel to isobars, where $\nabla p$ is the pressure gradient tensor and $f$ is the Coriolis parameter.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            } else if(level === 'level4') {
+                container.innerHTML = `
+                    <div class="space-y-6">
+                        <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-3">
+                            <h4 class="text-base font-bold text-amber-400"><i class="fa-solid fa-integral mr-2"></i> Level 4: Advanced Calculus & CAPE Integrals (Doctoral / Graduate Level)</h4>
+                            <p class="text-slate-300 text-sm leading-relaxed">
+                                Graduate-level atmospheric dynamics requires evaluating line and vertical integrals over sounding profiles to calculate buoyancy energy and thermal wind shear.
+                            </p>
+                        </div>
+
+                        <div class="space-y-4">
+                            <!-- CAPE Integral -->
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-3">
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Vertical Definite Integral</span>
+                                <h5 class="font-bold text-white">Convective Available Potential Energy (CAPE) Integral</h5>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    CAPE is calculated by integrating positive buoyancy from the Level of Free Convection (LFC) to the Equilibrium Level (EL) along a parcel ascent path.
+                                </p>
+                                <div class="bg-slate-900 p-3 rounded border border-slate-800 font-mono text-xs text-amber-300 overflow-x-auto">
+                                    CAPE = ∫ (from LFC to EL) g [ (T_parcel(z) - T_env(z)) / T_env(z) ] dz
+                                </div>
+                                <p class="text-xs text-slate-400">
+                                    <em>Conversational Walkthrough:</em> Imagine slicing a Skew-T sounding vertically into tiny horizontal layers of thickness $dz$. In each layer, if the parcel temperature $T_{parcel}$ is warmer than the environment $T_{env}$, gravity ($g$) multiplies that positive thermal buoyancy fraction. Summing (integrating) all those slices yields total kinetic energy available for the thunderstorm updraft in J/kg!
+                                </p>
+                            </div>
+
+                            <!-- Thermal Wind Shear -->
+                            <div class="bg-slate-950 border border-slate-800 rounded-xl p-5 space-y-3">
+                                <span class="text-xs font-semibold px-2.5 py-1 rounded bg-amber-500/10 text-amber-400 border border-amber-500/20">Partial Derivative & Temperature Gradient</span>
+                                <h5 class="font-bold text-white">The Thermal Wind Equation</h5>
+                                <p class="text-xs text-slate-300 leading-relaxed">
+                                    Relates vertical shear of the geostrophic wind directly to horizontal temperature gradients across baroclinic zones.
+                                </p>
+                                <div class="bg-slate-900 p-3 rounded border border-slate-800 font-mono text-xs text-amber-300 overflow-x-auto">
+                                    ∂V_g / ∂z = -(g / f T) ( k × ∇T )
+                                </div>
+                                <p class="text-xs text-slate-400">
+                                    <em>Conversational Walkthrough:</em> This is why jet streams exist! Where horizontal temperature changes ($\nabla T$) are strongest (like across a cold front or polar boundary), the wind changes speed rapidly with height, creating high shear and jet stream cores.
+                                </p>
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
+        }
+
+        function setResponseLength(len) {
+            currentResponseLength = len;
+            document.querySelectorAll('.length-btn').forEach(b => {
+                b.className = "length-btn px-3 py-1 rounded bg-slate-800 text-slate-300 hover:bg-slate-700 transition-colors";
+            });
+            document.getElementById(`len-${len}`).className = "length-btn px-3 py-1 rounded bg-orange-600 text-white font-medium transition-colors";
+        }
+
+        function handleAIQuery(e) {
+            e.preventDefault();
+            const input = document.getElementById('aiInput');
+            const query = input.value.trim();
+            if(!query) return;
+
+            const chatWindow = document.getElementById('aiChatWindow');
+            
+            chatWindow.innerHTML += `
+                <div class="flex items-start justify-end space-x-3">
+                    <div class="bg-orange-600/20 border border-orange-500/40 rounded-xl p-3 text-slate-200 max-w-xl">
+                        ${query}
+                    </div>
+                    <div class="w-8 h-8 rounded-full bg-slate-700 flex-shrink-0 flex items-center justify-center text-white text-xs font-bold">Nono</div>
+                </div>
+            `;
+            input.value = '';
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+
+            setTimeout(() => {
+                let responseText = `Executing deep analysis on query: "${query}" at [${currentResponseLength.toUpperCase()} level]. `;
+                if(currentResponseLength === 'short') {
+                    responseText += "Thermodynamic and kinematic profiles demonstrate robust buoyancy and wind shear vectors supportive of organized convective structures.";
+                } else if(currentResponseLength === 'medium') {
+                    responseText += "Evaluating hodograph curvature, SRH, and boundary layer moisture fluxes. Steep mid-lapse rates and elevated mixed-layer CAPE strongly favor persistent mesoscale updrafts.";
+                } else {
+                    responseText += "Rigorous doctoral-level synthesis: Integrating the primitive equations of motion with virtual potential temperature corrections and dual-pol radar polarimetric signatures indicates exceptional instability. Low-level streamwise vorticity flux exceeds 0.35 m²/s², while 0-3km storm-relative helicity reaches 400 m²/s², establishing an optimal thermodynamic and kinematic regime for tornadogenesis.";
+                }
+
+                chatWindow.innerHTML += `
+                    <div class="flex items-start space-x-3">
+                        <div class="w-8 h-8 rounded-full bg-orange-600 flex-shrink-0 flex items-center justify-center text-white text-xs font-bold">AI</div>
+                        <div class="bg-slate-800/80 border border-slate-700/60 rounded-xl p-3 text-slate-200 max-w-xl space-y-2">
+                            <p>${responseText}</p>
+                            <div class="border-t border-slate-700/60 pt-2 text-xs text-slate-400 space-y-1">
+                                <p class="font-semibold text-slate-300"><i class="fa-solid fa-book-bookmark text-orange-500 mr-1"></i> Verified Scientific Citations & Repositories:</p>
+                                <a href="#" class="block text-orange-400 hover:underline">• AMS Journal of Atmospheric Sciences — Master Dynamics Compendium</a>
+                                <a href="#" class="block text-orange-400 hover:underline">• NOAA/SPC Severe Weather Sounding Climatology Archive</a>
+                            </div>
+                        </div>
+                    </div>
+                `;
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+            }, 600);
+        }
+
+        renderEncyclopedia();
+    </script>
+</body>
+</html>
